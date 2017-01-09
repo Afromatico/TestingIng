@@ -1,0 +1,12 @@
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Debug\ClassLibrary2.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Debug\ClassLibrary2.pdb
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Debug\ClassLibrary2.xml
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.vbprojResolveAssemblyReference.cache
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\Interop.Office.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\Interop.VBIDE.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.vbproj.ResolveComReference.cache
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.Resources.resources
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.vbproj.GenerateResource.Cache
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.xml
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Debug\ClassLibrary2.pdb
