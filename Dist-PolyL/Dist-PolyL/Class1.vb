@@ -2,6 +2,7 @@
 Imports Autodesk.AutoCAD.DatabaseServices
 Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.Geometry
+Imports Autodesk.AutoCAD.EditorInput
 
 Public Class Class1
 
@@ -10,18 +11,40 @@ Public Class Class1
 
     <CommandMethod("ADDDISTANCE")> _
     Public Sub addDistance()
-        '' Get the current database
-        Dim acCurDb As Object = HostApplicationServices.WorkingDatabase
+        selectSelecction()
+    End Sub
 
-        '' Create a dynamic reference to model or paper space
-        Dim acSpace As Object = acCurDb.CurrentSpaceId
+    Private Sub selectSelecction()
 
-        '' Create a line that starts at 5,5 and ends at 12,3
-        Dim acLine As Object = New Line(New Point3d(5, 5, 0),
-                                        New Point3d(12, 3, 0))
+        Dim myPEO As New Autodesk.AutoCAD.EditorInput.PromptEntityOptions(vbLf & "Select BarMark:")
+        Dim mydwg, mydb, myed, myPS, myPer, myent, mytrans, mytransman As Object
+        mydwg = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
+        mydb = mydwg.Database
+        myed = mydwg.Editor
+        myPEO.SetRejectMessage("Porfavor, seleciona una Polylinea." & vbCrLf)
+        myPEO.AddAllowedClass(GetType(Autodesk.AutoCAD.DatabaseServices.Polyline), False)
+        myPer = myed.GetEntity(myPEO)
+        myPS = myPer.Status
+        Select Case myPS
+            Case Autodesk.AutoCAD.EditorInput.PromptStatus.OK
+                Dim pline As Polyline
+                mytransman = mydwg.TransactionManager
+                mytrans = mytransman.StartTransaction
+                myent = myPer.ObjectId.GetObject(Autodesk.AutoCAD.DatabaseServices.OpenMode.ForRead)
+                pline = CType(myent, Polyline)
+                MsgBox(pline.Length.ToString)
 
-        '' Add the new object to the current space
-        acSpace.AppendEntity(acLine)
+                MsgBox("Entity is on layer " & myent.Layer)
+            Case Autodesk.AutoCAD.EditorInput.PromptStatus.Cancel
+                MsgBox("You cancelled.")
+                Exit Sub
+            Case Autodesk.AutoCAD.EditorInput.PromptStatus.Error
+                MsgBox("Error warning.")
+                Exit Sub
+            Case Else
+                Exit Sub
+        End Select
+
     End Sub
 
 
