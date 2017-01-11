@@ -7,7 +7,7 @@
     <ProjectGuid>{E2A7B6A3-E73D-439A-937B-B75D02F1E982}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Dist_PolyL</RootNamespace>
-    <AssemblyName>Dist-PolyL</AssemblyName>
+    <AssemblyName>PL-DiagramaDeCurvatura</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Dist-PolyL.xml</DocumentationFile>
+    <DocumentationFile>PL-DiagramaDeCurvatura.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -27,7 +27,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Dist-PolyL.xml</DocumentationFile>
+    <DocumentationFile>PL-DiagramaDeCurvatura.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
