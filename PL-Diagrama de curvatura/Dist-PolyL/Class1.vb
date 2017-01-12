@@ -12,7 +12,13 @@ Public Class Class1
 
     Dim H As Double = 500
 
-    Dim V As Double = 50
+    Dim V As Double = 100
+
+    Dim Xorigin As Double = 0
+
+    Dim Yorigin As Double = 0
+
+
 
     <CommandMethod("GENERARDIAGRAMADECURVATURA")> _
     Public Sub addDistance()
@@ -40,6 +46,10 @@ Public Class Class1
                 If pPtRes.Status = PromptStatus.OK Then
 
                     Dim point2 As Point3d = pPtRes.Value
+
+                    Xorigin = point2.X
+                    Yorigin = point2.Y
+
                     Dim analisis As ArrayList = parsePolyLine(pline)
 
                     Try
@@ -60,7 +70,10 @@ Public Class Class1
                         Select Case tupla.Item2
                             Case "Rect"
                                 If last.Item2.Equals("None") Then
-                                    drawLine(dis, 0, dis + tupla.Item4, 0, True, Color.FromRgb(255, 0, 0), 0.5, myDwg.Database)
+
+                                    drawLine(dis, 0, dis + tupla.Item4, 0, True, Color.FromRgb(255, 0, 0), 0, myDwg.Database)
+                                    drawText(med, 0, "Recta en " + tupla.Item4.ToString("f") + " m.", True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+
                                 Else
                                     Dim alpha As Double
 
@@ -132,33 +145,38 @@ Public Class Class1
 
                                     alpha = alpha * 200 / Math.PI
 
+                                    drawText(med, 0, "Recta en " + tupla.Item4.ToString("f") + " m.", True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+                                    drawText(dis, 0, "α=" + alpha.ToString("f"), True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
 
-                                    MsgBox(alpha.ToString & vbCrLf)
+                                    drawLine(dis, 0, dis + tupla.Item4, 0, True, Color.FromRgb(255, 0, 0), 0, myDwg.Database)
 
-                                    drawText(med, 0, "Recta en " + tupla.Item4.ToString("f") + " m.", True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
-                                    drawText(dis, 0, "α=" + alpha.ToString("f"), True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
-
-                                    drawLine(dis, 0, dis + tupla.Item4, 0, True, Color.FromRgb(255, 0, 0), 0.5, myDwg.Database)
-
-                                    End If
+                                End If
                             Case "Arc"
+
+                                Dim alpha2 As Double = 0
 
                                 Dim alpha As Double = Math.Abs(tupla.Item5 * 200 / Math.PI - 200)
                                 Dim T As Double = tupla.Item6 * Math.Tan(tupla.Item5 / 2)
 
 
-                                drawText(med - 18 * H / 100, 0, "R=" + tupla.Item6.ToString("f"), True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
-                                drawText(med - 6 * H / 100, 0, "α=" + alpha.ToString("f"), True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
-                                drawText(med + 6 * H / 100, 0, "T=" + T.ToString("f"), True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
-                                drawText(med + 18 * H / 100, 0, "D=" + tupla.Item4.ToString("f"), True, Color.FromRgb(0, 0, 0), 1.8, 0, AttachmentPoint.BottomCenter)
+                                If pline.GetBulgeAt(tupla.Item1) > 0 Then
+                                    alpha2 = 750 / tupla.Item6
+                                Else
+                                    alpha2 = -750 / tupla.Item6
+                                End If
 
-                                drawLine(dis, 750 / tupla.Item6, dis + tupla.Item4, 750 / tupla.Item6, True, Color.FromRgb(255, 0, 0), 0.5, myDwg.Database)
+                                drawText(med - 9 * H / 100, 6, "R=" + tupla.Item6.ToString("f"), True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+                                drawText(med - 9 * H / 100, 1, "α=" + alpha.ToString("F4"), True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+                                drawText(med + 9 * H / 100, 1, "T=" + T.ToString("F3"), True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+                                drawText(med + 9 * H / 100, 6, "D=" + tupla.Item4.ToString("F3"), True, Color.FromRgb(0, 0, 0), 2.25, 0, AttachmentPoint.BottomCenter)
+
+                                drawLine(dis, alpha2, dis + tupla.Item4, alpha2, True, Color.FromRgb(255, 0, 0), 0, myDwg.Database)
                             Case "Euler"
 
                             Case Else
 
-                                    MsgBox("Error en el dibujo" & vbCrLf)
-                                    Return
+                                MsgBox("Error en el dibujo" & vbCrLf)
+                                Return
 
                         End Select
 
@@ -167,6 +185,8 @@ Public Class Class1
                         last = tupla
 
                     Next
+
+                    drawLine(0, 0, dis, 0, True, Color.FromRgb(0, 0, 0), 0, myDwg.Database)
 
                     mytrans.Commit()
 
@@ -260,8 +280,8 @@ Public Class Class1
 
             Dim mSpace As BlockTableRecord = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite)
             Dim newLine As New Autodesk.AutoCAD.DatabaseServices.Polyline
-            newLine.AddVertexAt(0, New Point2d(x0 * 100 / H, y0 * 100 / V), 0, widht, widht)
-            newLine.AddVertexAt(0, New Point2d(x1 * 100 / H, y1 * 100 / V), 0, widht, widht)
+            newLine.AddVertexAt(0, New Point2d(x0 * 100 / H + Xorigin, y0 * 100 / V + Yorigin), 0, widht, widht)
+            newLine.AddVertexAt(0, New Point2d(x1 * 100 / H + Xorigin, y1 * 100 / V + Yorigin), 0, widht, widht)
             If hasColor Then
                 newLine.Color = color
             End If
@@ -295,7 +315,7 @@ Public Class Class1
             Using asMtext As MText = New MText()
                 asMtext.Attachment = justify
                 asMtext.SetAttachmentMovingLocation(asMtext.Attachment)
-                asMtext.Location = New Point3d(x0 * 100 / H, y0 * 100 / V, 0)
+                asMtext.Location = New Point3d(x0 * 100 / H + Xorigin, y0 * 100 / V + Yorigin, 0)
                 asMtext.Width = 55
                 asMtext.Contents = text
                 asMtext.Rotation = rotation
