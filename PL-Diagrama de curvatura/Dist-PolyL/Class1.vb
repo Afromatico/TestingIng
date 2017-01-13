@@ -28,20 +28,19 @@ Public Class Class1
     Dim Layer2 As String = "RedLineLayer"
     Dim Layer3 As String = "BlackLineLayer"
 
-    Dim AsignedLayers As Boolean = False
+    Sub New()
+        CreateAndAssignALayer(Layer1, Color.FromRgb(0, 0, 0), LineWeight.ByLineWeightDefault)
+        CreateAndAssignALayer(Layer2, Color.FromRgb(255, 0, 0), LineWeight.ByLineWeightDefault)
+        CreateAndAssignALayer(Layer3, Color.FromRgb(0, 0, 0), LineWeight.ByLineWeightDefault)
 
+    End Sub
 
-    <CommandMethod("GENERARDIAGRAMADECURVATURA")> _
+    <CommandMethod("DIAG_CURVATURA")> _
     Public Sub addDistance()
 
         Dim myDwg As Autodesk.AutoCAD.ApplicationServices.Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim myTransMan As Autodesk.AutoCAD.ApplicationServices.TransactionManager
         Dim mytrans As Transaction
-
-        If Not AsignedLayers Then
-            CreateAndAssignALayer()
-            AsignedLayers = True
-        End If
 
         Dim result As Autodesk.AutoCAD.EditorInput.PromptEntityResult = getPolyline()
         Dim Status As Autodesk.AutoCAD.EditorInput.PromptStatus = result.Status
@@ -50,246 +49,207 @@ Public Class Class1
             Case Autodesk.AutoCAD.EditorInput.PromptStatus.OK
 
                 Dim myent As DBObject
+
                 Dim pline As Polyline
 
                 Dim listEntities As List(Of Entity) = New List(Of Entity)
 
                 myTransMan = myDwg.TransactionManager
                 mytrans = myTransMan.StartTransaction
+
                 myent = result.ObjectId.GetObject(Autodesk.AutoCAD.DatabaseServices.OpenMode.ForRead)
+
                 pline = CType(myent, Polyline)
 
                 Dim pPtRes As PromptPointResult = importPoint()
 
-                If pPtRes.Status = PromptStatus.OK Then
+                Try
 
-                    Dim point2 As Point3d = pPtRes.Value
+                    If pPtRes.Status = PromptStatus.OK Then
 
-                    Xorigin = point2.X
-                    Yorigin = point2.Y
+                        Dim point2 As Point3d = pPtRes.Value
 
-                    Dim analisis As ArrayList = parsePolyLine(pline)
+                        Xorigin = point2.X
+                        Yorigin = point2.Y
 
-                    Try
-                        analisis = parsePolyLine(pline)
-                    Catch ex As Exception
-                        MsgBox("Error en el parser" & vbCrLf & ex.Message)
-                        Return
-                    End Try
+                        Dim analisis As ArrayList = parsePolyLine(pline)
 
-                    Dim last As Tuple(Of Integer, String, Integer, Double, Double, Double) = New Tuple(Of Integer, String, Integer, Double, Double, Double)(0, "None", 0, 0, 0, 0)
+                        Try
+                            analisis = parsePolyLine(pline)
+                        Catch ex As Exception
+                            MsgBox("Error en el parser" & vbCrLf & ex.Message)
+                            Return
+                        End Try
 
-                    Dim dis As Double = 0
-                    Dim med As Double = 0
+                        Dim last As Tuple(Of Integer, String, Integer, Double, Double, Double) = New Tuple(Of Integer, String, Integer, Double, Double, Double)(0, "None", 0, 0, 0, 0)
 
-                    Dim lastNotEulesDis As Double = 0
-                    Dim accEulerDis As Double = 0
-                    Dim lastNotEuler As Tuple(Of Integer, String, Integer, Double, Double, Double) = New Tuple(Of Integer, String, Integer, Double, Double, Double)(0, "None", 0, 0, 0, 0)
+                        Dim dis As Double = 0
+                        Dim med As Double = 0
 
-                    Dim height As Double = 0
-                    Dim lastHeight As Double = 0
+                        Dim lastNotEulesDis As Double = 0
+                        Dim accEulerDis As Double = 0
+                        Dim lastNotEuler As Tuple(Of Integer, String, Integer, Double, Double, Double) = New Tuple(Of Integer, String, Integer, Double, Double, Double)(0, "None", 0, 0, 0, 0)
 
-                    For Each tupla As Tuple(Of Integer, String, Integer, Double, Double, Double) In analisis
+                        Dim height As Double = 0
+                        Dim lastHeight As Double = 0
 
-                        med = (dis * 2 + tupla.Item4) / 2
+                        For Each tupla As Tuple(Of Integer, String, Integer, Double, Double, Double) In analisis
 
-                        Select Case tupla.Item2
-                            Case "Rect"
-                                If Not last.Item2.Equals("Rect") Then
+                            med = (dis * 2 + tupla.Item4) / 2
 
-                                    listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                            Select Case tupla.Item2
+                                Case "Rect"
+                                    If Not last.Item2.Equals("Rect") Then
 
-                                    listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
+                                        listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
 
-                                    height = 0
+                                        listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
 
-                                Else
-                                    Dim alpha As Double
-
-                                    Dim point11 As Point3d = pline.GetLineSegmentAt(last.Item1).StartPoint
-                                    Dim point22 As Point3d = pline.GetLineSegmentAt(last.Item1).EndPoint
-                                    Dim point33 As Point3d = pline.GetLineSegmentAt(tupla.Item1).EndPoint
-
-                                    Dim A As Double = point11.Y - point22.Y
-                                    Dim B As Double = point11.X - point22.X
-
-                                    Dim norm As Double = (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)))
-
-                                    A = A / norm
-                                    B = B / norm
-
-                                    Dim A2 As Double = point22.Y - point33.Y
-                                    Dim B2 As Double = point22.X - point33.X
-
-                                    Dim norm2 As Double = (Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2)))
-
-                                    A2 = A2 / norm
-                                    B2 = B2 / norm
-
-                                    Dim selec As Integer
-
-                                    If (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) > Math.Sqrt(2) Then
-                                        If B > (B + B2) / (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) Then
-                                            If A > 0 Then
-                                                selec = 3
-                                            Else
-                                                selec = 4
-                                            End If
-                                        Else
-                                            If A > 0 Then
-                                                selec = 4
-                                            Else
-                                                selec = 3
-                                            End If
-                                        End If
+                                        height = 0
 
                                     Else
-                                        If 0 > (B + B2) / (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) Then
-                                            If A > 0 Then
-                                                selec = 2
-                                            Else
-                                                selec = 1
-                                            End If
-                                        Else
-                                            If A > 0 Then
-                                                selec = 1
-                                            Else
-                                                selec = 2
-                                            End If
-                                        End If
+
+                                        Dim alpha As Double
+
+                                        Dim point11 As Point3d = pline.GetLineSegmentAt(last.Item1).StartPoint
+                                        Dim point22 As Point3d = pline.GetLineSegmentAt(last.Item1).EndPoint
+                                        Dim point33 As Point3d = pline.GetLineSegmentAt(tupla.Item1).EndPoint
+
+                                        alpha = angle3Points(point11, point22, point33)
+
+                                        listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(dis, 1, "α=" + alpha.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+
+                                        listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
+
+                                        height = 0
+
+                                    End If
+                                Case "Arc"
+
+                                    Dim alpha2 As Double = 0
+
+                                    Dim alpha As Double = Math.Abs(tupla.Item5 * 200 / Math.PI - 200)
+                                    Dim T As Double = tupla.Item6 * Math.Tan(tupla.Item5 / 2)
+
+
+                                    If pline.GetBulgeAt(tupla.Item1) > 0 Then
+                                        alpha2 = mm / tupla.Item6
+
+                                        listEntities.Add(drawText(med - 9 / H, -3, "R=" + tupla.Item6.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med - 9 / H, -1, "α=" + alpha.ToString("F4"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med + 9 / H, -1, "T=" + T.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med + 9 / H, -3, "D=" + tupla.Item4.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                    Else
+                                        alpha2 = -mm / tupla.Item6
+
+                                        listEntities.Add(drawText(med - 9 / H, +3, "R=" + tupla.Item6.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med - 9 / H, +1, "α=" + alpha.ToString("F4"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med + 9 / H, +1, "T=" + T.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        listEntities.Add(drawText(med + 9 / H, +3, "D=" + tupla.Item4.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
                                     End If
 
-                                    Select Case selec
-                                        Case 1
-                                            alpha = 2 * Math.PI - Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
-                                        Case 2
-                                            alpha = Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
-                                        Case 3
-                                            alpha = Math.PI - Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
-                                        Case 4
-                                            alpha = Math.PI + Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
+                                    listEntities.Add(drawLine(dis, alpha2, dis + tupla.Item4, alpha2, Layer2, 0))
 
-                                    End Select
+                                    height = alpha2
 
+                                Case "Euler"
 
-                                    alpha = alpha * 200 / Math.PI
-
-                                    listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                    listEntities.Add(drawText(dis, 1, "α=" + alpha.ToString("f"), Layer1, height, 0, AttachmentPoint.BottomCenter))
-
-                                    listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
-
-                                    height = 0
-
-                                End If
-                            Case "Arc"
-
-                                Dim alpha2 As Double = 0
-
-                                Dim alpha As Double = Math.Abs(tupla.Item5 * 200 / Math.PI - 200)
-                                Dim T As Double = tupla.Item6 * Math.Tan(tupla.Item5 / 2)
-
-
-                                If pline.GetBulgeAt(tupla.Item1) > 0 Then
-                                    alpha2 = mm / tupla.Item6
-                                Else
-                                    alpha2 = -mm / tupla.Item6
-                                End If
-
-                                listEntities.Add(drawText(med - 9 * H / 100, 6, "R=" + tupla.Item6.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                listEntities.Add(drawText(med - 9 * H / 100, 1, "α=" + alpha.ToString("F4"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                listEntities.Add(drawText(med + 9 * H / 100, 1, "T=" + T.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                listEntities.Add(drawText(med + 9 * H / 100, 6, "D=" + tupla.Item4.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-
-                                listEntities.Add(drawLine(dis, alpha2, dis + tupla.Item4, alpha2, Layer2, 0))
-
-                                height = alpha2
-
-                            Case "Euler"
-
-                                If Not last.Item2.Equals("Euler") Then
-                                    accEulerDis = tupla.Item4
-                                    lastNotEuler = last
-                                    lastNotEulesDis = dis
-                                Else
-                                    accEulerDis += tupla.Item4
-                                End If
-
-                                If analisis.Count > tupla.Item1 + 1 And Not analisis.Item(tupla.Item1 + 1).Item2.Equals("Euler") Then
-
-                                    Dim nextTuple As Tuple(Of Integer, String, Integer, Double, Double, Double) = analisis.Item(tupla.Item1 + 1)
-
-                                    If lastNotEuler.Item2.Equals("Arc") And Not nextTuple.Item2.Equals("Arc") Then
-
-                                        Dim alpha2 As Double = 0
-
-                                        If pline.GetBulgeAt(lastNotEuler.Item1) > 0 Then
-                                            alpha2 = mm / lastNotEuler.Item6
-                                        Else
-                                            alpha2 = -mm / lastNotEuler.Item6
-                                        End If
-
-                                        Dim cal As Double = Math.Sqrt(accEulerDis * lastNotEuler.Item6)
-
-                                        listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-
-                                        listEntities.Add(drawLine(lastNotEulesDis, alpha2, lastNotEulesDis + accEulerDis, 0, Layer2, 0))
-
-                                    ElseIf Not lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
-
-                                        Dim alpha2 As Double = 0
-
-                                        If pline.GetBulgeAt(nextTuple.Item1) > 0 Then
-                                            alpha2 = mm / nextTuple.Item6
-                                        Else
-                                            alpha2 = -mm / nextTuple.Item6
-                                        End If
-
-                                        Dim cal As Double = Math.Sqrt(accEulerDis * nextTuple.Item6)
-
-                                        listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-
-                                        listEntities.Add(drawLine(lastNotEulesDis, 0, lastNotEulesDis + accEulerDis, alpha2, Layer2, 0))
-
-                                    ElseIf lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
-                                        MsgBox("Se encontro clotoide, pero hay dos Arcos posibles, porfavor revisar a mano" & vbCrLf)
+                                    If Not last.Item2.Equals("Euler") Then
+                                        accEulerDis = tupla.Item4
+                                        lastNotEuler = last
+                                        lastNotEulesDis = dis
                                     Else
+                                        accEulerDis += tupla.Item4
+                                    End If
+
+                                    If analisis.Count >= tupla.Item1 + 1 AndAlso (analisis.Count = tupla.Item1 + 1 OrElse Not analisis.Item(tupla.Item1 + 1).Item2.Equals("Euler")) Then
+
+                                        Dim nextTuple As Tuple(Of Integer, String, Integer, Double, Double, Double)
+
+                                        If Not analisis.Count = tupla.Item1 + 1 Then
+                                            nextTuple = analisis.Item(tupla.Item1 + 1)
+                                        Else
+                                            nextTuple = New Tuple(Of Integer, String, Integer, Double, Double, Double)(0, "None", 0, 0, 0, 0)
+                                        End If
+
+                                        If lastNotEuler.Item2.Equals("Arc") And Not nextTuple.Item2.Equals("Arc") Then
+
+                                            Dim alpha2 As Double = 0
+
+                                            If pline.GetBulgeAt(lastNotEuler.Item1) > 0 Then
+                                                alpha2 = mm / lastNotEuler.Item6
+                                            Else
+                                                alpha2 = -mm / lastNotEuler.Item6
+                                            End If
+
+                                            Dim cal As Double = Math.Sqrt(accEulerDis * lastNotEuler.Item6)
+
+                                            listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+
+                                            listEntities.Add(drawLine(lastNotEulesDis, alpha2, lastNotEulesDis + accEulerDis, 0, Layer2, 0))
+
+                                        ElseIf Not lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
+
+                                            Dim alpha2 As Double = 0
+
+                                            If pline.GetBulgeAt(nextTuple.Item1) > 0 Then
+                                                alpha2 = mm / nextTuple.Item6
+                                            Else
+                                                alpha2 = -mm / nextTuple.Item6
+                                            End If
+
+                                            Dim cal As Double = Math.Sqrt(accEulerDis * nextTuple.Item6)
+
+                                            listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+
+                                            listEntities.Add(drawLine(lastNotEulesDis, 0, lastNotEulesDis + accEulerDis, alpha2, Layer2, 0))
+
+                                        ElseIf lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
+                                            MsgBox("Se encontro clotoide, pero hay dos Arcos posibles, porfavor revisar a mano" & vbCrLf)
+                                        Else
+                                            MsgBox("Se encontro clotoide, pero no se encontro una curva a cual asociarla" & vbCrLf)
+                                        End If
+
+                                    ElseIf analisis.Count <= tupla.Item1 + 1 Then
                                         MsgBox("Se encontro clotoide, pero no se encontro una curva a cual asociarla" & vbCrLf)
                                     End If
 
-                                ElseIf analisis.Count <= tupla.Item1 + 1 Then
-                                    MsgBox("Se encontro clotoide, pero no se encontro una curva a cual asociarla" & vbCrLf)
-                                End If
-
-                            Case Else
+                                Case Else
 
                                     MsgBox("Error en el dibujo" & vbCrLf)
                                     Return
 
-                        End Select
+                            End Select
 
-                        If height <> lastHeight And Not last.Item2.Equals("None") And Not last.Item2.Equals("Euler") Then
-                            listEntities.Add(drawLine(dis, lastHeight, dis, height, Layer2, 0))
-                        End If
+                            If height <> lastHeight And Not last.Item2.Equals("None") And Not last.Item2.Equals("Euler") Then
+                                listEntities.Add(drawLine(dis, lastHeight, dis, height, Layer2, 0))
+                            End If
 
 
-                        dis += tupla.Item4
+                            dis += tupla.Item4
 
-                        last = tupla
+                            last = tupla
 
-                        lastHeight = height
+                            lastHeight = height
 
-                    Next
+                        Next
 
-                    listEntities.Add(drawLine(0, 0, dis, 0, Layer3, 0))
+                        listEntities.Add(drawLine(0, 0, dis, 0, Layer3, 0))
 
-                    putEntietiesInDraw(listEntities, myDwg.Database)
+                        putEntietiesInDraw(listEntities, myDwg.Database)
 
+                        mytrans.Commit()
+
+                    Else
+                        mytrans.Commit()
+                    End If
+
+                Catch ex As Exception
                     mytrans.Commit()
-
-                Else
-                    mytrans.Commit()
-                End If
+                    MsgBox("Error en el dibujo" & vbCrLf & ex.Message)
+                    Return
+                End Try
 
             Case Autodesk.AutoCAD.EditorInput.PromptStatus.Cancel
                 MsgBox("You cancelled.")
@@ -303,24 +263,38 @@ Public Class Class1
 
     End Sub
 
-    <CommandMethod("CAMBIARPROPORCIONES")> _
+    <CommandMethod("SET_PARAMETROS")> _
     Public Sub cambiarProporciones()
         Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim pStrOpts As PromptDoubleOptions = New PromptDoubleOptions(vbLf & "Ingrese nueva Escala Horizontal (Default 1) 1:")
+
+        pStrOpts.DefaultValue = 1
+        pStrOpts.AllowNegative = False
+        pStrOpts.AllowZero = False
 
         Dim pStrRes As PromptDoubleResult = acDoc.Editor.GetDouble(pStrOpts)
 
         H = pStrRes.Value
 
         pStrOpts = New PromptDoubleOptions(vbLf & "Ingrese tamao del Texto (Default 1) : ")
+
+        pStrOpts.DefaultValue = 1
+        pStrOpts.AllowNegative = False
+        pStrOpts.AllowZero = False
+
         pStrRes = acDoc.Editor.GetDouble(pStrOpts)
 
         heightText = pStrRes.Value
 
         pStrOpts = New PromptDoubleOptions(vbLf & "Ingrese nueva Escala de Curvatura (Default 750):")
+
+        pStrOpts.DefaultValue = 750
+        pStrOpts.AllowNegative = False
+        pStrOpts.AllowZero = False
+
         pStrRes = acDoc.Editor.GetDouble(pStrOpts)
 
-        H = pStrRes.Value
+        mm = pStrRes.Value
 
     End Sub
 
@@ -441,7 +415,7 @@ Public Class Class1
 
     Private Function getPolyline() As PromptEntityResult
 
-        Dim myPEO As New Autodesk.AutoCAD.EditorInput.PromptEntityOptions(vbLf & "Select BarMark:")
+        Dim myPEO As New Autodesk.AutoCAD.EditorInput.PromptEntityOptions(vbLf & "Seleccione Eje en planta:")
         Dim mydwg As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim myed As Editor = mydwg.Editor
 
@@ -469,9 +443,9 @@ Public Class Class1
 
     End Function
 
-    Public Sub CreateAndAssignALayer()
+    Private Sub CreateAndAssignALayer(layer1 As String, color As Color, linewidth As LineWeight)
         '' Get the current document and database
-        Dim acDoc As Document = Application.DocumentManager.MdiActiveDocument
+        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
         Dim acCurDb As Database = acDoc.Database
 
         '' Start a transaction
@@ -482,46 +456,15 @@ Public Class Class1
             acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId, _
                                          OpenMode.ForRead)
 
-            If acLyrTbl.Has(Layer1) = False Then
+            If acLyrTbl.Has(layer1) = False Then
                 Using acLyrTblRec As LayerTableRecord = New LayerTableRecord()
 
-                    acLyrTblRec.Color = Color.FromRgb(0, 0, 0)
-                    acLyrTblRec.Name = Layer1
+                    acLyrTblRec.Color = color
+                    acLyrTblRec.Name = layer1
+                    acLyrTblRec.LineWeight = linewidth
 
                     acLyrTbl.UpgradeOpen()
 
-                    acLyrTbl.Add(acLyrTblRec)
-                    acTrans.AddNewlyCreatedDBObject(acLyrTblRec, True)
-                End Using
-            End If
-
-            If acLyrTbl.Has(Layer2) = False Then
-                Using acLyrTblRec As LayerTableRecord = New LayerTableRecord()
-
-                    '' Assign the layer the ACI color 3 and a name
-                    acLyrTblRec.Color = Color.FromRgb(255, 0, 0)
-                    acLyrTblRec.Name = Layer2
-
-                    '' Upgrade the Layer table for write
-                    acLyrTbl.UpgradeOpen()
-
-                    '' Append the new layer to the Layer table and the transaction
-                    acLyrTbl.Add(acLyrTblRec)
-                    acTrans.AddNewlyCreatedDBObject(acLyrTblRec, True)
-                End Using
-            End If
-
-            If acLyrTbl.Has(Layer3) = False Then
-                Using acLyrTblRec As LayerTableRecord = New LayerTableRecord()
-
-                    '' Assign the layer the ACI color 3 and a name
-                    acLyrTblRec.Color = Color.FromRgb(0, 0, 0)
-                    acLyrTblRec.Name = Layer3
-
-                    '' Upgrade the Layer table for write
-                    acLyrTbl.UpgradeOpen()
-
-                    '' Append the new layer to the Layer table and the transaction
                     acLyrTbl.Add(acLyrTblRec)
                     acTrans.AddNewlyCreatedDBObject(acLyrTblRec, True)
                 End Using
@@ -531,5 +474,76 @@ Public Class Class1
             acTrans.Commit()
         End Using
     End Sub
+
+    Private Function angle3Points(startPoint As Point3d, commonPoint As Point3d, endPoint As Point3d) As Double
+
+        Dim alpha As Double
+
+        Dim A As Double = startPoint.Y - commonPoint.Y
+        Dim B As Double = startPoint.X - commonPoint.X
+
+        Dim norm As Double = (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)))
+
+        A = A / norm
+        B = B / norm
+
+        Dim A2 As Double = commonPoint.Y - endPoint.Y
+        Dim B2 As Double = commonPoint.X - endPoint.X
+
+        Dim norm2 As Double = (Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2)))
+
+        A2 = A2 / norm
+        B2 = B2 / norm
+
+        Dim selec As Integer
+
+        If (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) > Math.Sqrt(2) Then
+            If B > (B + B2) / (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) Then
+                If A > 0 Then
+                    selec = 3
+                Else
+                    selec = 4
+                End If
+            Else
+                If A > 0 Then
+                    selec = 4
+                Else
+                    selec = 3
+                End If
+            End If
+
+        Else
+            If 0 > (B + B2) / (Math.Sqrt(Math.Pow(A + A2, 2) + Math.Pow(B + B2, 2))) Then
+                If A > 0 Then
+                    selec = 2
+                Else
+                    selec = 1
+                End If
+            Else
+                If A > 0 Then
+                    selec = 1
+                Else
+                    selec = 2
+                End If
+            End If
+        End If
+
+        Select Case selec
+            Case 1
+                alpha = 2 * Math.PI - Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
+            Case 2
+                alpha = Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
+            Case 3
+                alpha = Math.PI - Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
+            Case 4
+                alpha = Math.PI + Math.Acos(Math.Abs(A * A2 + B * B2) / (Math.Sqrt(Math.Pow(A, 2) + Math.Pow(B, 2)) * Math.Sqrt(Math.Pow(A2, 2) + Math.Pow(B2, 2))))
+
+        End Select
+
+
+        Return alpha * 200 / Math.PI
+
+    End Function
+
 
 End Class
