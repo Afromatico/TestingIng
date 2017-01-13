@@ -4,9 +4,9 @@ D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\ob
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.Resources.resources
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.vbproj.GenerateResource.Cache
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.vbprojResolveAssemblyReference.cache
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-AL.dll
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-AL.pdb
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-AL.xml
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-AL.dll
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-AL.xml
-D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-AL.pdb
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.pdb
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.xml
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.xml
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.pdb
