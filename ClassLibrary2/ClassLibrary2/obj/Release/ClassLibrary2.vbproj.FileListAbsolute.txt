@@ -10,3 +10,6 @@ D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bi
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.dll
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.xml
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.pdb
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.dll
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.pdb
+D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.xml
