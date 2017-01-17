@@ -139,29 +139,29 @@ Public Class Class1
     Private Sub drawInitialState(xlSheet As Worksheet, reference As Double)
 
         draw.addAtLastEntity(draw.drawLine(0, 0, 0, 60 / vScale, LayerCajon))
-        draw.addAtLastEntity(draw.drawLine(45 / hScale, 0, 45 / hScale, 60 / vScale, LayerCajon))
+        draw.addAtLastEntity(draw.drawLine(45, 0, 0, 0, 0, 60 / vScale, LayerCajon))
 
-        draw.addAtFirst(draw.drawText(28 / hScale, 61 / vScale, "REF. " + reference.ToString, LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 56 / vScale, "DISTANCIAS PARCIALES", LayerDistancias, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 51 / vScale, "DISTANC. ACUMULADAS", LayerDistancias, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 46 / vScale, "COTAS TERRENO", LayerCotas, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 41 / vScale, "COTAS RADIER", LayerCotas, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 31 / vScale, "MATERIAL-DIAMETROS", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 26 / vScale, "CAUDAL (l/s)", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 21 / vScale, "PENDIENTES", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 16 / vScale, "VOLUMEN EXCAV. 0-2 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(14.3 / hScale, 11 / vScale, "2-4 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(14.3 / hScale, 6 / vScale, "4-6 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
-        draw.addAtFirst(draw.drawText(1.8 / hScale, 1 / vScale, "APOYO TIPO", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(28, 61, 0, 0, "REF. " + reference.ToString, LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 56, 0, 0, "DISTANCIAS PARCIALES", LayerDistancias, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 51, 0, 0, "DISTANC. ACUMULADAS", LayerDistancias, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 46, 0, 0, "COTAS TERRENO", LayerCotas, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 41, 0, 0, "COTAS RADIER", LayerCotas, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 31, 0, 0, "MATERIAL-DIAMETROS", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 26, 0, 0, "CAUDAL (l/s)", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 21, 0, 0, "PENDIENTES", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 16, 0, 0, "VOLUMEN EXCAV. 0-2 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(14.3, 11, 0, 0, "2-4 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(14.3, 6, 0, 0, "4-6 m", LayerDatos, 0, AttachmentPoint.BottomLeft))
+        draw.addAtFirst(draw.drawText(1.8, 1, 0, 0, "APOYO TIPO", LayerDatos, 0, AttachmentPoint.BottomLeft))
 
-        draw.addAtFirst(draw.drawText(50 / hScale, 51 / vScale, xlSheet.Cells(2, 3).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
-        draw.addAtFirst(draw.drawText(50 / hScale, 46 / vScale, System.Convert.ToDouble(xlSheet.Cells(3, 3).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
-        draw.addAtFirst(draw.drawText(50 / hScale, 36 / vScale, System.Convert.ToDouble(xlSheet.Cells(5, 3).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
+        draw.addAtFirst(draw.drawText(50, 51, 0, 0, xlSheet.Cells(2, 3).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
+        draw.addAtFirst(draw.drawText(50, 46, 0, 0, System.Convert.ToDouble(xlSheet.Cells(3, 3).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
+        draw.addAtFirst(draw.drawText(50, 36, 0, 0, System.Convert.ToDouble(xlSheet.Cells(5, 3).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
 
-        draw.addAtFirst(draw.drawText(49 / hScale, 55 / vScale + (xlSheet.Cells(3, 3).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(3, 3).Value() - xlSheet.Cells(5, 3).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.BottomCenter))
+        draw.addAtFirst(draw.drawText(49, 55, 0, (xlSheet.Cells(3, 3).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(3, 3).Value() - xlSheet.Cells(5, 3).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.BottomCenter))
 
-        draw.addAtLastEntity(draw.drawLine(50 / hScale, 60 / vScale, 50 / hScale, 60 / vScale + (xlSheet.Cells(3, 3).Value() - reference), LayerDibujo))
-        draw.addAtLastEntity(draw.drawLine(50 / hScale, 60 / vScale + (xlSheet.Cells(5, 3).Value() - reference), 50 / hScale, 60 / vScale + (xlSheet.Cells(3, 3).Value() - reference), LayerTuberia))
+        draw.addAtLastEntity(draw.drawLine(50, 60, 0, 0, 0, (xlSheet.Cells(3, 3).Value() - reference), LayerDibujo))
+        draw.addAtLastEntity(draw.drawLine(50, 60, 0, (xlSheet.Cells(5, 3).Value() - reference), 0, (xlSheet.Cells(3, 3).Value() - reference), LayerTuberia))
 
     End Sub
 
@@ -172,9 +172,6 @@ Public Class Class1
         Dim h As Double = 0
         Dim j As Integer = 3
         Dim i As Integer = 2
-
-        Dim xZero As Double = 50 / hScale
-        Dim yZero As Double = 60 / vScale
 
         While Not String.IsNullOrEmpty(xlSheet.Cells(i, j).Value)
 
@@ -188,30 +185,30 @@ Public Class Class1
             Dim diametro As Double = getDiameter(xlSheet.Cells(i + 5, j - 1).Value().ToString) / 1000
 
 
-            draw.addAtLastEntity(draw.drawLine(x + xZero, y + yZero, xlSheet.Cells(i, j).Value() + xZero, (xlSheet.Cells(i + 1, j).Value() - reference) + yZero, LayerTerreno))
-            draw.addAtLastEntity(draw.drawLine(xlSheet.Cells(i, j).Value() + xZero, yZero, xlSheet.Cells(i, j).Value() + xZero, (xlSheet.Cells(i + 1, j).Value() - reference) + yZero, LayerDibujo))
-            draw.addAtLastEntity(draw.drawLine(xlSheet.Cells(i, j).Value() + xZero, 0, xlSheet.Cells(i, j).Value() + xZero, 35 / vScale, LayerDibujo))
+            draw.addAtLastEntity(draw.drawLine(50, 60, x, y, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 1, j).Value() - reference), LayerTerreno))
+            draw.addAtLastEntity(draw.drawLine(50, 60, xlSheet.Cells(i, j).Value(), 0, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 1, j).Value() - reference), LayerDibujo))
+            draw.addAtLastEntity(draw.drawLine(50, 0, xlSheet.Cells(i, j).Value(), 0, xlSheet.Cells(i, j).Value(), 35 / vScale, LayerDibujo))
 
-            draw.addAtLastEntity(draw.drawLine(x + xZero, h + yZero, xlSheet.Cells(i, j).Value() + xZero, (xlSheet.Cells(i + 2, j).Value() - reference) + yZero, LayerTuberia))
-            draw.addAtLastEntity(draw.drawLine(x + xZero, (h + diametro) + yZero, xlSheet.Cells(i, j).Value() + xZero, ((xlSheet.Cells(i + 2, j).Value() - reference) + diametro) + yZero, LayerTuberia))
+            draw.addAtLastEntity(draw.drawLine(50, 60, x, h, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 2, j).Value() - reference), LayerTuberia))
+            draw.addAtLastEntity(draw.drawLine(50, 60, x, (h + diametro), xlSheet.Cells(i, j).Value(), ((xlSheet.Cells(i + 2, j).Value() - reference) + diametro), LayerTuberia))
 
-            draw.addAtLastEntity(draw.drawLine(xlSheet.Cells(i, j).Value() + xZero, (xlSheet.Cells(i + 3, j).Value() - reference) + yZero, xlSheet.Cells(i, j).Value() + xZero, (xlSheet.Cells(i + 1, j).Value() - reference) + yZero, LayerTuberia))
+            draw.addAtLastEntity(draw.drawLine(50, 60, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 3, j).Value() - reference), xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 1, j).Value() - reference), LayerTuberia))
 
-            draw.addAtFirst(draw.drawText(xlSheet.Cells(i, j).Value() + 49 / hScale, 55 / vScale + (xlSheet.Cells(i + 1, j).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(i + 1, j).Value() - xlSheet.Cells(i + 2, j).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(xlSheet.Cells(i, j).Value() + 51 / hScale, 55 / vScale + (xlSheet.Cells(i + 1, j).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(i + 1, j).Value() - xlSheet.Cells(i + 3, j).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.TopCenter))
+            draw.addAtFirst(draw.drawText(49, 55, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 1, j).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(i + 1, j).Value() - xlSheet.Cells(i + 2, j).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(51, 55, xlSheet.Cells(i, j).Value(), (xlSheet.Cells(i + 1, j).Value() - reference), System.Convert.ToDouble(Math.Round(xlSheet.Cells(i + 1, j).Value() - xlSheet.Cells(i + 3, j).Value(), 2, MidpointRounding.AwayFromZero)).ToString("F"), LayerDatos, Math.PI / 2, AttachmentPoint.TopCenter))
 
-            Dim actualX As Double = xlSheet.Cells(i, j).Value() + xZero
+            Dim actualX As Double = xlSheet.Cells(i, j).Value()
 
-            draw.addAtFirst(draw.drawText(actualX, 51 / vScale, xlSheet.Cells(i, j).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(actualX, 46 / vScale, System.Convert.ToDouble(xlSheet.Cells(i + 1, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(actualX, 41 / vScale, System.Convert.ToDouble(xlSheet.Cells(i + 2, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(actualX, 36 / vScale, System.Convert.ToDouble(xlSheet.Cells(i + 3, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 51, actualX, 0, xlSheet.Cells(i, j).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 46, actualX, 0, System.Convert.ToDouble(xlSheet.Cells(i + 1, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 41, actualX, 0, System.Convert.ToDouble(xlSheet.Cells(i + 2, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 36, actualX, 0, System.Convert.ToDouble(xlSheet.Cells(i + 3, j).Value()).ToString("F"), LayerCotas, 0, AttachmentPoint.BottomCenter))
 
-            actualX = (xlSheet.Cells(i, j).Value() + x) / 2 + xZero
+            actualX = (xlSheet.Cells(i, j).Value() + x) / 2
 
-            draw.addAtFirst(draw.drawText(actualX, 56 / vScale, xlSheet.Cells(i - 1, j - 1).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(actualX, 31 / vScale, xlSheet.Cells(i + 5, j - 1).Value().ToString, LayerDatos, 0, AttachmentPoint.BottomCenter))
-            draw.addAtFirst(draw.drawText(actualX, 21 / vScale, System.Convert.ToDouble(xlSheet.Cells(i + 7, j - 1).Value() * 100).ToString("F") + "%", LayerDatos, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 56, actualX, 0, xlSheet.Cells(i - 1, j - 1).Value().ToString, LayerDistancias, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 31, actualX, 0, xlSheet.Cells(i + 5, j - 1).Value().ToString, LayerDatos, 0, AttachmentPoint.BottomCenter))
+            draw.addAtFirst(draw.drawText(50, 21, actualX, 0, System.Convert.ToDouble(xlSheet.Cells(i + 7, j - 1).Value() * 100).ToString("F") + "%", LayerDatos, 0, AttachmentPoint.BottomCenter))
 
 
             x = xlSheet.Cells(i, j).Value()
@@ -258,11 +255,11 @@ Public Class Class1
     Private Sub drawFinalState(xlSheet As Worksheet, referencia As Double, x As Double)
 
         draw.addAtLastEntity(draw.drawLine(0, 0, x + 63 / hScale, 0, LayerCajon))
-        draw.addAtLastEntity(draw.drawLine(0, 60 / vScale, x + 63 / hScale, 60 / vScale, LayerCajon))
-        draw.addAtLastEntity(draw.drawLine(x + 63 / hScale, 0, x + 63 / hScale, 60 / vScale, LayerCajon))
+        draw.addAtLastEntity(draw.drawLine(0, 60, 0, 0, x + 63 / hScale, 0, LayerCajon))
+        draw.addAtLastEntity(draw.drawLine(63, 0, x, 0, x, 60 / vScale, LayerCajon))
 
         For index As Integer = 1 To 11
-            draw.addAtLastEntity(draw.drawLine(0, (60 - 5 * index) / vScale, x + 63 / hScale, (60 - 5 * index) / vScale, LayerDibujo))
+            draw.addAtLastEntity(draw.drawLine(0, 60 - 5 * index, 0, 0, x + 63 / hScale, 0, LayerDibujo))
         Next
 
     End Sub

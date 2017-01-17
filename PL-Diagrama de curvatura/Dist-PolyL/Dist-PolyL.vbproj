@@ -57,7 +57,6 @@
     </Reference>
     <Reference Include="AutocadManager2015">
       <HintPath>..\..\AutocadManager2015\AutocadManager2015\bin\Release\AutocadManager2015.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
