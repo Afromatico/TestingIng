@@ -4,9 +4,11 @@ Imports Autodesk.AutoCAD.ApplicationServices
 Imports Autodesk.AutoCAD.Geometry
 Imports Autodesk.AutoCAD.EditorInput
 Imports Autodesk.AutoCAD.Colors
+Imports AutocadManager2015
 
 Public Class Class1
 
+    Dim draw As DrawClass
 
     Dim tolerancia As Double = 10
 
@@ -23,17 +25,6 @@ Public Class Class1
     Dim Rmin As Double = 10000
 
     Dim heightText As Double = 1
-
-    Dim Layer1 As String = "TextLayer"
-    Dim Layer2 As String = "RedLineLayer"
-    Dim Layer3 As String = "BlackLineLayer"
-
-    Sub New()
-        CreateAndAssignALayer(Layer1, Color.FromRgb(0, 0, 0), LineWeight.ByLineWeightDefault)
-        CreateAndAssignALayer(Layer2, Color.FromRgb(255, 0, 0), LineWeight.ByLineWeightDefault)
-        CreateAndAssignALayer(Layer3, Color.FromRgb(0, 0, 0), LineWeight.ByLineWeightDefault)
-
-    End Sub
 
     <CommandMethod("DIAG_CURVATURA")> _
     Public Sub addDistance()
@@ -69,8 +60,15 @@ Public Class Class1
 
                         Dim point2 As Point3d = pPtRes.Value
 
-                        Xorigin = point2.X
-                        Yorigin = point2.Y
+                        Dim layer1 As String = "TextLayer"
+                        Dim layer2 As String = "RedLineLayer"
+                        Dim layer3 As String = "BlackLineLayer"
+
+                        draw = New DrawClass(point2.X, point2.Y, H, V)
+
+                        draw.addLayer(layer1, Color.FromRgb(0, 0, 0), heightText, 0)
+                        draw.addLayer(layer2, Color.FromRgb(255, 0, 0), heightText, 0)
+                        draw.addLayer(layer3, Color.FromRgb(0, 0, 0), heightText, 0)
 
                         Dim analisis As ArrayList = parsePolyLine(pline)
 
@@ -101,9 +99,8 @@ Public Class Class1
                                 Case "Rect"
                                     If Not last.Item2.Equals("Rect") Then
 
-                                        listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-
-                                        listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
+                                        draw.addAtFirst(draw.drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtLastEntity(draw.drawLine(dis, 0, dis + tupla.Item4, 0, layer2))
 
                                         height = 0
 
@@ -117,10 +114,10 @@ Public Class Class1
 
                                         alpha = angle3Points(point11, point22, point33)
 
-                                        listEntities.Add(drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(dis, 1, "α=" + alpha.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med, 1, "Recta en " + tupla.Item4.ToString("f") + " m.", layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(dis, 1, "α=" + alpha.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
 
-                                        listEntities.Add(drawLine(dis, 0, dis + tupla.Item4, 0, Layer2, 0))
+                                        draw.addAtLastEntity(draw.drawLine(dis, 0, dis + tupla.Item4, 0, layer2))
 
                                         height = 0
 
@@ -136,20 +133,22 @@ Public Class Class1
                                     If pline.GetBulgeAt(tupla.Item1) > 0 Then
                                         alpha2 = mm / tupla.Item6
 
-                                        listEntities.Add(drawText(med - 9 / H, -3, "R=" + tupla.Item6.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med - 9 / H, -1, "α=" + alpha.ToString("F4"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med + 9 / H, -1, "T=" + T.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med + 9 / H, -3, "D=" + tupla.Item4.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med - 9 / H, -3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med - 9 / H, -1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med + 9 / H, -1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med + 9 / H, -3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+
                                     Else
                                         alpha2 = -mm / tupla.Item6
 
-                                        listEntities.Add(drawText(med - 9 / H, +3, "R=" + tupla.Item6.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med - 9 / H, +1, "α=" + alpha.ToString("F4"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med + 9 / H, +1, "T=" + T.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
-                                        listEntities.Add(drawText(med + 9 / H, +3, "D=" + tupla.Item4.ToString("F3"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med - 9 / H, +3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med - 9 / H, +1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med + 9 / H, +1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(med + 9 / H, +3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+
                                     End If
 
-                                    listEntities.Add(drawLine(dis, alpha2, dis + tupla.Item4, alpha2, Layer2, 0))
+                                    draw.addAtLastEntity(draw.drawLine(dis, alpha2, dis + tupla.Item4, alpha2, layer2))
 
                                     height = alpha2
 
@@ -185,9 +184,10 @@ Public Class Class1
 
                                             Dim cal As Double = Math.Sqrt(accEulerDis * lastNotEuler.Item6)
 
-                                            listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                            draw.addAtFirst(draw.drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
 
-                                            listEntities.Add(drawLine(lastNotEulesDis, alpha2, lastNotEulesDis + accEulerDis, 0, Layer2, 0))
+                                            draw.addAtLastEntity(draw.drawLine(lastNotEulesDis, alpha2, lastNotEulesDis + accEulerDis, 0, layer2))
+
 
                                         ElseIf Not lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
 
@@ -201,9 +201,10 @@ Public Class Class1
 
                                             Dim cal As Double = Math.Sqrt(accEulerDis * nextTuple.Item6)
 
-                                            listEntities.Add(drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), Layer1, heightText, 0, AttachmentPoint.BottomCenter))
+                                            draw.addAtFirst(draw.drawText(lastNotEulesDis + accEulerDis / 2, 1, "A=" + cal.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
 
-                                            listEntities.Add(drawLine(lastNotEulesDis, 0, lastNotEulesDis + accEulerDis, alpha2, Layer2, 0))
+                                            draw.addAtLastEntity(draw.drawLine(lastNotEulesDis, 0, lastNotEulesDis + accEulerDis, alpha2, layer2))
+
 
                                         ElseIf lastNotEuler.Item2.Equals("Arc") And nextTuple.Item2.Equals("Arc") Then
                                             MsgBox("Se encontro clotoide, pero hay dos Arcos posibles, porfavor revisar a mano" & vbCrLf)
@@ -223,7 +224,7 @@ Public Class Class1
                             End Select
 
                             If height <> lastHeight And Not last.Item2.Equals("None") And Not last.Item2.Equals("Euler") Then
-                                listEntities.Add(drawLine(dis, lastHeight, dis, height, Layer2, 0))
+                                draw.addAtLastEntity(draw.drawLine(dis, lastHeight, dis, height, layer2))
                             End If
 
 
@@ -235,9 +236,9 @@ Public Class Class1
 
                         Next
 
-                        listEntities.Add(drawLine(0, 0, dis, 0, Layer3, 0))
+                        draw.addAtLastEntity(draw.drawLine(0, 0, dis, 0, layer3))
 
-                        putEntietiesInDraw(listEntities, myDwg.Database)
+                        draw.draw()
 
                         mytrans.Commit()
 
@@ -384,35 +385,6 @@ Public Class Class1
 
     End Function
 
-    Private Function drawLine(x0 As Double, y0 As Double, x1 As Double, y1 As Double, layer As String, widht As Double) As Autodesk.AutoCAD.DatabaseServices.Entity
-
-        Dim newLine As New Autodesk.AutoCAD.DatabaseServices.Polyline
-        newLine.AddVertexAt(0, New Point2d(x0 * H + Xorigin, y0 * V + Yorigin), 0, widht, widht)
-        newLine.AddVertexAt(0, New Point2d(x1 * H + Xorigin, y1 * V + Yorigin), 0, widht, widht)
-        newLine.Layer = layer
-
-        Return newLine
-
-    End Function
-
-    Private Sub putEntietiesInDraw(ListEntity As List(Of Entity), db As Database)
-
-        Using trans As Transaction = db.TransactionManager.StartTransaction
-
-            Dim mSpace As BlockTableRecord = trans.GetObject(db.CurrentSpaceId, OpenMode.ForWrite)
-
-            ListEntity.Reverse()
-
-            For Each Entity As Entity In ListEntity
-                mSpace.AppendEntity(Entity)
-                trans.AddNewlyCreatedDBObject(Entity, True)
-            Next
-            trans.Commit()
-
-        End Using
-
-    End Sub
-
     Private Function getPolyline() As PromptEntityResult
 
         Dim myPEO As New Autodesk.AutoCAD.EditorInput.PromptEntityOptions(vbLf & "Seleccione Eje en planta:")
@@ -425,55 +397,6 @@ Public Class Class1
 
         Return myPer
     End Function
-
-    Private Function drawText(x0 As Double, y0 As Double, text As String, layer As String, height As Double, rotation As Double, justify As AttachmentPoint) As Autodesk.AutoCAD.DatabaseServices.Entity
-
-
-        Dim asMtext As MText = New MText()
-        asMtext.Attachment = justify
-        asMtext.SetAttachmentMovingLocation(asMtext.Attachment)
-        asMtext.Location = New Point3d(x0 * H + Xorigin, y0 * V + Yorigin, 0)
-        asMtext.Width = 55
-        asMtext.Contents = text
-        asMtext.Rotation = rotation
-        asMtext.Layer = layer
-        asMtext.TextHeight = height
-
-        Return asMtext
-
-    End Function
-
-    Private Sub CreateAndAssignALayer(layer1 As String, color As Color, linewidth As LineWeight)
-        '' Get the current document and database
-        Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
-        Dim acCurDb As Database = acDoc.Database
-
-        '' Start a transaction
-        Using acTrans As Transaction = acCurDb.TransactionManager.StartTransaction()
-
-            '' Open the Layer table for read
-            Dim acLyrTbl As LayerTable
-            acLyrTbl = acTrans.GetObject(acCurDb.LayerTableId, _
-                                         OpenMode.ForRead)
-
-            If acLyrTbl.Has(layer1) = False Then
-                Using acLyrTblRec As LayerTableRecord = New LayerTableRecord()
-
-                    acLyrTblRec.Color = color
-                    acLyrTblRec.Name = layer1
-                    acLyrTblRec.LineWeight = linewidth
-
-                    acLyrTbl.UpgradeOpen()
-
-                    acLyrTbl.Add(acLyrTblRec)
-                    acTrans.AddNewlyCreatedDBObject(acLyrTblRec, True)
-                End Using
-            End If
-
-            '' Save the changes and dispose of the transaction
-            acTrans.Commit()
-        End Using
-    End Sub
 
     Private Function angle3Points(startPoint As Point3d, commonPoint As Point3d, endPoint As Point3d) As Double
 
@@ -544,6 +467,5 @@ Public Class Class1
         Return alpha * 200 / Math.PI
 
     End Function
-
 
 End Class
