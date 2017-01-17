@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7A69C77B-47CA-4302-9E2D-AD2B2A2B366F}</ProjectGuid>
+    <ProjectGuid>{CF30EE34-DF97-4260-8F87-C54264CC404D}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>ClassLibrary2</RootNamespace>
-    <AssemblyName>PL-ALL</AssemblyName>
+    <RootNamespace>PTExcel</RootNamespace>
+    <AssemblyName>PTExcel</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -18,7 +18,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>PL-ALL.xml</DocumentationFile>
+    <DocumentationFile>PTExcel.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -27,7 +27,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>PL-ALL.xml</DocumentationFile>
+    <DocumentationFile>PTExcel.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -55,8 +55,7 @@
       <HintPath>C:\ObjectARX 2015\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AutocadManager2015, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AutocadManager2015">
       <HintPath>..\..\AutocadManager2015\AutocadManager2015\bin\Release\AutocadManager2015.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -79,6 +78,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.vb" />
     <Compile Include="Class2.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

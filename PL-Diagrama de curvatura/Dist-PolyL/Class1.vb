@@ -133,18 +133,18 @@ Public Class Class1
                                     If pline.GetBulgeAt(tupla.Item1) > 0 Then
                                         alpha2 = mm / tupla.Item6
 
-                                        draw.addAtFirst(draw.drawText(med - 9 / H, -3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med - 9 / H, -1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med + 9 / H, -1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med + 9 / H, -3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(-9, 0, med, -3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(-9, 0, med, -1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(9, 0, med, -1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(9, 0, med, -3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
 
                                     Else
                                         alpha2 = -mm / tupla.Item6
 
-                                        draw.addAtFirst(draw.drawText(med - 9 / H, +3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med - 9 / H, +1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med + 9 / H, +1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
-                                        draw.addAtFirst(draw.drawText(med + 9 / H, +3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(-9, 0, med, +3, "R=" + tupla.Item6.ToString("f"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(-9, 0, med, +1, "α=" + alpha.ToString("F4"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(9, 0, med, +1, "T=" + T.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
+                                        draw.addAtFirst(draw.drawText(9, 0, med, +3, "D=" + tupla.Item4.ToString("F3"), layer1, 0, AttachmentPoint.BottomCenter))
 
                                     End If
 
