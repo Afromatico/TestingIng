@@ -130,6 +130,37 @@ Public Class DrawClass
 
     End Function
 
+    Public Function drawPolyLine(x0 As Double, y0 As Double, lista As List(Of Tuple(Of Double, Double)), layer As String) As Entity
+
+        Dim newLine As New Autodesk.AutoCAD.DatabaseServices.Polyline
+        Dim widht As Double = layerList.Find(Function(x) x.compareNameLayer(layer)).getWidthLine
+
+        For Each tupla In lista
+            newLine.AddVertexAt(0, New Point2d(tupla.Item1 * hScale + x0 + xOrigin, tupla.Item2 * vScale + y0 + yOrigin), 0, widht, widht)
+        Next
+        newLine.Layer = layer
+
+        Return newLine
+
+    End Function
+
+    Public Function drawDimension(x0 As Double, y0 As Double, x1 As Double, y1 As Double, x2 As Double, y2 As Double, rot As Double, layer As String) As Entity
+
+        Dim acDoc As Document = Application.DocumentManager.MdiActiveDocument
+        Dim acCurDb As Database = acDoc.Database
+        Dim acRotDim As New Autodesk.AutoCAD.DatabaseServices.RotatedDimension
+
+        acRotDim.XLine1Point = New Point3d(x0 * hScale + xOrigin, y0 * vScale + yOrigin, 0)
+        acRotDim.XLine2Point = New Point3d(x1 * hScale + xOrigin, y1 * vScale + yOrigin, 0)
+        acRotDim.Rotation = rot
+        acRotDim.DimLinePoint = New Point3d(x2 * hScale + xOrigin, y2 * vScale + yOrigin, 0)
+        acRotDim.Layer = layer
+        acRotDim.DimensionStyle = acCurDb.Dimstyle
+
+        Return acRotDim
+
+    End Function
+
     Public Sub drawHatch(xr As Double, yr As Double, x0 As Double, y0 As Double, x1 As Double, y1 As Double, layerHatch As String, layerPolyline As String)
 
         '' Get the current document and database

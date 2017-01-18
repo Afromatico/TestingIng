@@ -55,7 +55,8 @@
       <HintPath>C:\ObjectARX 2015\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AutocadManager2015">
+    <Reference Include="AutocadManager2015, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\AutocadManager2015\AutocadManager2015\bin\Release\AutocadManager2015.dll</HintPath>
     </Reference>
     <Reference Include="System" />

@@ -72,8 +72,10 @@ Public Class Class1
                         Throw New Exception(ErrorStatus.InvalidDxf3dPoint, "Error al recivir un punto")
                     End If
 
+                    xlBook.Close()
                 Catch ex As Exception
                     Autodesk.AutoCAD.ApplicationServices.Application.ShowAlertDialog(ex.Message)
+                    xlBook.Close()
                     Return
                 End Try
             Next
