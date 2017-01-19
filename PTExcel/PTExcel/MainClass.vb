@@ -62,21 +62,47 @@ Public Class MainClass
 
                     If pPtRes.Status = PromptStatus.OK Then
 
+                        Dim X As Double = pPtRes.Value.X
+                        Dim Y As Double = pPtRes.Value.Y
+                        Dim i As Integer = 1
+                        Dim j As Integer = 1
+
                         draw = New DrawClass(pPtRes.Value.X, pPtRes.Value.Y, hScale, vScale)
-
-                        blockList = New List(Of Block)
-
-                        createBlocks(1, 1, xlSheet, -11.4728)
 
                         setLayout()
 
-                        drawPT(xlSheet, 0, 0)
-
-                        Dim title As MText = draw.drawText(0, -1.3, xlSheet.Cells(1, 1).Value, LayerTextoTitulo, 0, AttachmentPoint.BottomCenter)
-                        draw.addAtFirst(title)
-
+                        Dim Lista As New List(Of Tuple(Of Double, Double))
+                        Lista.Add(New Tuple(Of Double, Double)(0, 0))
+                        Lista.Add(New Tuple(Of Double, Double)(0, -265.5))
+                        Lista.Add(New Tuple(Of Double, Double)(74.3, -265.5))
+                        Lista.Add(New Tuple(Of Double, Double)(74.3, 0))
+                        Dim poly As Polyline = draw.drawPolyLine(0, 0, Lista, LayerPostes)
+                        poly.Closed = True
+                        draw.addAtLastEntity(poly)
                         draw.draw()
 
+                        While Not String.IsNullOrEmpty(xlSheet.Cells(j, i).Value)
+
+                            draw = New DrawClass(pPtRes.Value.X + 37.15, pPtRes.Value.Y - 10.4 - 29 * (j - 1) / 6, hScale, vScale)
+
+                            com = 1
+
+                            blockList = New List(Of Block)
+
+                            createBlocks(i, j, xlSheet, -11.4728)
+
+                            setLayout()
+
+                            drawPT(xlSheet, 0, 0)
+
+                            Dim title As MText = draw.drawText(0, -1.3, xlSheet.Cells(j, i).Value, LayerTextoTitulo, 0, AttachmentPoint.BottomCenter)
+                            draw.addAtFirst(title)
+
+                            draw.draw()
+
+                            j += 6
+
+                        End While
                     Else
                         Throw New Exception(ErrorStatus.InvalidDxf3dPoint, "Error al recivir un punto")
                     End If
@@ -104,7 +130,7 @@ Public Class MainClass
         draw.addLayer(LayerFFCC, Color.FromRgb(0, 255, 255), 1, 0.216)
 
         draw.addLayer(LayerTextoTitulo, Color.FromRgb(0, 0, 0), 1, 0)
-        draw.addLayer(LayerTextoComentario, Color.FromRgb(0, 0, 0), 0.2, 0)
+        draw.addLayer(LayerTextoComentario, Color.FromRgb(0, 0, 0), 0.5, 0)
         draw.addLayer(LayerDimension, Color.FromRgb(0, 0, 0), 0.5, 0)
 
         draw.addLayer(LayerHatsh, Color.FromRgb(255, 255, 255), 1, 0)
@@ -152,15 +178,15 @@ Public Class MainClass
                     blockList.Add(New A(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "C"
                     blockList.Add(New C(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Ci"
+                Case "CI"
                     blockList.Add(New Ci(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Av"
+                Case "AV"
                     blockList.Add(New Av(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "FFCC"
                     blockList.Add(New FFCC(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "L"
                     blockList.Add(New L(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Com"
+                Case "COM"
                     blockList.Add(New Com(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h, Me, ci, cj, xlSheet))
             End Select
 
@@ -202,11 +228,6 @@ Public Class MainClass
 
     End Function
 
-    Private Function getDiameter(celda As String) As Double
-        Dim values As String() = celda.Split("-")
-        Return Double.Parse(values.GetValue(1))
-    End Function
-
     Private Function importPoint() As PromptPointResult
 
         Dim acDoc As Document = Autodesk.AutoCAD.ApplicationServices.Application.DocumentManager.MdiActiveDocument
@@ -245,15 +266,15 @@ Public Class MainClass
                     lista.Add(New A(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "C"
                     lista.Add(New C(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Ci"
+                Case "CI"
                     lista.Add(New Ci(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Av"
+                Case "AV"
                     lista.Add(New Av(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "FFCC"
                     lista.Add(New FFCC(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
                 Case "L"
                     lista.Add(New L(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h))
-                Case "Com"
+                Case "COM"
                     lista.Add(New Com(xlSheet.Cells(j - 4, i).Value, xlSheet.Cells(j - 3, i).Value, xlSheet.Cells(j - 2, i).Value, xlSheet.Cells(j - 1, i).Value, xlSheet.Cells(j, i).Value, draw, h, Me, ci, cj, xlSheet))
             End Select
 

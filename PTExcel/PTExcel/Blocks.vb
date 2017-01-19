@@ -118,13 +118,18 @@ Public MustInherit Class ContructionBlock
 
         If String.IsNullOrEmpty(celda1) Then
             drawDWG.addAtFirst(drawDWG.drawDimension(tuple.Item1, tuple.Item2, tuple.Item1 + Me.calculeLenght, tuple.Item2, tuple.Item1 + Me.calculeLenght / 2, h, 0, LayerDimension))
-        ElseIf celda1.Equals("var") Then
+        ElseIf celda1.Equals("VAR") Then
             Dim Ent As RotatedDimension = drawDWG.drawDimension(tuple.Item1, tuple.Item2, tuple.Item1 + Me.calculeLenght, tuple.Item2, tuple.Item1 + Me.calculeLenght / 2, h, 0, LayerDimension)
             Ent.DimensionText = "var"
             drawDWG.addAtFirst(Ent)
         ElseIf celda1.Equals("NM") Then
 
         End If
+
+        If Not String.IsNullOrEmpty(celda3) Then
+            drawDWG.addAtFirst(drawDWG.drawText(tuple.Item1 + Me.calculeLenght / 2, tuple.Item2 - 0.8, celda3.ToString, LayerTextoComentario, 0, AttachmentPoint.BottomCenter))
+        End If
+
 
         Return Me.display.draw(tuple)
 
@@ -139,9 +144,9 @@ Public MustInherit Class ContructionBlock
             Return New Reduced(celda4, drawDWG, Me)
         ElseIf celda2.Equals("NN") Then
             Return New NN(celda4, drawDWG, Me)
-        ElseIf celda2.Equals("Rip") Then
+        ElseIf celda2.Equals("RIP") Then
             Return New Rip(celda4, drawDWG, Me)
-        ElseIf celda2.ToString Like "in/##*" Then
+        ElseIf celda2.ToString Like "IN/##*" Then
             Dim values As String() = celda2.Split("/")
             Return New Inclination(celda4, drawDWG, Me, values.GetValue(1))
         End If
@@ -166,7 +171,7 @@ Public Class FB
 
         drawDWG.addAtLastEntity(drawDWG.drawLine(tuple.Item1, tuple.Item2, 0, 0, 0, 1, LayerTerreno))
 
-        Me.drawTopComentary(tuple)
+        Me.drawTopComentary(New Tuple(Of Double, Double)(tuple.Item1, tuple.Item2 + 1))
 
     End Sub
 
@@ -182,7 +187,7 @@ Public Class FS
 
         drawDWG.addAtLastEntity(drawDWG.drawLine(tuple.Item1, tuple.Item2, 0, 0, 0, 3, LayerTerreno))
 
-        Me.drawTopComentary(tuple)
+        Me.drawTopComentary(New Tuple(Of Double, Double)(tuple.Item1, tuple.Item2 + 3))
 
     End Sub
 
@@ -214,7 +219,7 @@ Public Class FPRC
         drawDWG.addAtFirst(drawDWG.drawText(tuple.Item1 - 0.2, tuple.Item2 + 3, "PRC", LayerPRC, Math.PI / 2, AttachmentPoint.BottomRight))
 
 
-        Me.drawTopComentary(tuple)
+        Me.drawTopComentary(New Tuple(Of Double, Double)(tuple.Item1, tuple.Item2 + 3))
 
     End Sub
 
@@ -253,7 +258,7 @@ Public Class C
             Return New NN(celda4, drawDWG, Me)
         ElseIf celda2.Equals("Rip") Then
             Return New Rip(celda4, drawDWG, Me)
-        ElseIf celda2.ToString Like "in/##*" Then
+        ElseIf celda2.ToString Like "IN/##*" Then
             Dim values As String() = celda2.Split("/")
             Return New Inclination(celda4, drawDWG, Me, values.GetValue(1))
         End If
@@ -322,7 +327,7 @@ Public Class Com
         Dim lista As List(Of Block) = main.getNextCom(main.com, cj, xlSheet, h + 1)
         If String.IsNullOrEmpty(celda1) Then
             drawDWG.addAtFirst(drawDWG.drawDimension(tuple.Item1, tuple.Item2, tuple.Item1 + Me.calculeLenght, tuple.Item2, tuple.Item1 + Me.calculeLenght / 2, h, 0, LayerDimension))
-        ElseIf celda2.Equals("var") Then
+        ElseIf celda2.Equals("VAR") Then
             Dim Ent As RotatedDimension = drawDWG.drawDimension(tuple.Item1, tuple.Item2, tuple.Item1 + Me.calculeLenght, tuple.Item2, tuple.Item1 + Me.calculeLenght / 2, h, 0, LayerDimension)
             Ent.DimensionText = "var"
             drawDWG.addAtFirst(Ent)
@@ -380,7 +385,9 @@ Public Class Standart
     Public Overrides Function draw(tuple As Tuple(Of Double, Double)) As Tuple(Of Double, Double)
 
         Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2, 0, 0, Me.lenght, 0, LayerTerreno))
-        Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.15, 0, 0, Me.lenght, 0, myBlock.getLayout))
+        If myBlock.drawColor Then
+            Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.15, 0, 0, Me.lenght, 0, myBlock.getLayout))
+        End If
 
         Return New Tuple(Of Double, Double)(tuple.Item1 + Me.lenght, tuple.Item2)
     End Function
@@ -399,7 +406,9 @@ Public Class Reduced
         Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1 + Me.lenght, tuple.Item2 - 0.15, 0, 0, 0, 0.15, LayerTerreno))
 
         Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.15, 0, 0, Me.lenght, 0, LayerTerreno))
-        Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.3, 0, 0, Me.lenght, 0, myBlock.getLayout))
+        If myBlock.drawColor Then
+            Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.3, 0, 0, Me.lenght, 0, myBlock.getLayout))
+        End If
 
         Return New Tuple(Of Double, Double)(tuple.Item1 + Me.lenght, tuple.Item2)
     End Function
@@ -418,7 +427,9 @@ Public Class Inclination
     Public Overrides Function draw(tuple As Tuple(Of Double, Double)) As Tuple(Of Double, Double)
 
         Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2, 0, 0, Me.lenght, h, LayerTerreno))
-        Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.15, 0, 0, Me.lenght, h, myBlock.getLayout))
+        If myBlock.drawColor Then
+            Me.drawDWG.addAtLastEntity(Me.drawDWG.drawLine(tuple.Item1, tuple.Item2 - 0.15, 0, 0, Me.lenght, h, myBlock.getLayout))
+        End If
 
         Return New Tuple(Of Double, Double)(tuple.Item1 + Me.lenght, tuple.Item2 + h)
     End Function
@@ -496,7 +507,9 @@ Public Class Rip
         Dim newpoly As Polyline = New Polyline()
 
         Me.drawDWG.addAtLastEntity(Me.drawDWG.drawPolyLine(0, 0, lista, LayerTerreno))
-        Me.drawDWG.addAtLastEntity(Me.drawDWG.drawPolyLine(0, -0.15, lista, myBlock.getLayout))
+        If myBlock.drawColor Then
+            Me.drawDWG.addAtLastEntity(Me.drawDWG.drawPolyLine(0, -0.15, lista, myBlock.getLayout))
+        End If
 
         Return New Tuple(Of Double, Double)(tuple.Item1 + Me.lenght, tuple.Item2)
     End Function
