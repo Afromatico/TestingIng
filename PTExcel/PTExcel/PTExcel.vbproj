@@ -55,7 +55,8 @@
       <HintPath>C:\ObjectARX 2015\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="AutocadManager2015">
+    <Reference Include="AutocadManager2015, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\AutocadManager2015\AutocadManager2015\bin\Release\AutocadManager2015.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -78,8 +79,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.vb" />
-    <Compile Include="Class2.vb" />
+    <Compile Include="MainClass.vb" />
+    <Compile Include="Blocks.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
