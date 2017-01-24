@@ -7,3 +7,12 @@ D:\Users\Ja\Documents\Visual Studio 2012\Projects\Dist-PolyL\Dist-PolyL\bin\Debu
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.dll
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.xml
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.pdb
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\bin\Debug\KM-EJE.dll
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\bin\Debug\KM-EJE.pdb
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\bin\Debug\KM-EJE.xml
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\Dist-PolyL.vbprojResolveAssemblyReference.cache
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\Dist_PolyL.Resources.resources
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\Dist-PolyL.vbproj.GenerateResource.Cache
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.dll
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.xml
+C:\Users\ame_f\Projects\Testing\Dist-PolyL\Dist-PolyL\obj\Debug\KM-EJE.pdb

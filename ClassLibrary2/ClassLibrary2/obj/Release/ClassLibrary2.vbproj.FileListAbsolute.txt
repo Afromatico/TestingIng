@@ -13,3 +13,17 @@ D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\ob
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.dll
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.pdb
 D:\Users\Ja\Documents\Visual Studio 2012\Projects\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.xml
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.dll
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.pdb
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\PL-ALL.xml
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.dll
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.pdb
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\bin\Release\AutocadManager2015.xml
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.vbprojResolveAssemblyReference.cache
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\Interop.Microsoft.Office.Core.dll
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.vbproj.ResolveComReference.cache
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.Resources.resources
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\ClassLibrary2.vbproj.GenerateResource.Cache
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.dll
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.xml
+C:\Users\ame_f\Projects\Testing\ClassLibrary2\ClassLibrary2\obj\Release\PL-ALL.pdb
